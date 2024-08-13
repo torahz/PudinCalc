@@ -1,176 +1,257 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PudinCalc 🍮</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍮</text></svg>">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #FBDF96;
-            color: #AF5711;
             margin: 0;
             padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #E07F14;
-        }
-
-        .section {
-            margin-bottom: 20px;
-        }
-
-        .input-group {
-            margin-bottom: 10px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
+            background-color: #FBDF96;
             color: #AF5711;
         }
-
-        input[type="text"],
-        input[type="number"] {
-            width: calc(100% - 12px);
-            padding: 10px;
-            border: 2px solid #AF5711;
+        h1 {
+            color: #E07F14;
+            text-align: center;
+        }
+        .section {
+            background-color: #F7C876;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            border: 1px solid #CF701D;
             border-radius: 5px;
         }
-
         button {
-            width: 100%;
-            padding: 15px;
-            background-color: #E07F14;
+            background-color: #F5B03E;
+            color: #AF5711;
             border: none;
+            padding: 10px 15px;
             border-radius: 5px;
-            color: white;
-            font-size: 18px;
             cursor: pointer;
             margin-top: 10px;
         }
-
         button:hover {
-            background-color: #F5B03E;
+            background-color: #E07F14;
         }
-
-        #result {
-            background-color: #F7C876;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
+        #resultado {
             font-weight: bold;
-            color: #AF5711;
+            margin-top: 20px;
         }
     </style>
 </head>
-
 <body>
     <h1>PudinCalc 🍮</h1>
-    <div class="section" id="recipeSection">
+    
+    <div class="section">
         <h2>Receita</h2>
-        <div id="ingredientList">
-            <div class="input-group">
-                <label for="ingredientName">Nome do Ingrediente</label>
-                <input type="text" id="ingredientName">
-                <label for="ingredientQuantity">Quantidade</label>
-                <input type="number" id="ingredientQuantity">
-                <label for="ingredientCost">Valor do Ingrediente</label>
-                <input type="number" id="ingredientCost" step="0.01">
+        <div id="ingredientes">
+            <div class="ingrediente">
+                <label>Nome do ingrediente:
+                    <input type="text" class="nome-ingrediente">
+                </label>
+                <label>Quantidade:
+                    <input type="number" class="qtd-ingrediente" step="0.01">
+                </label>
+                <label>Valor:
+                    <input type="number" class="valor-ingrediente" step="0.01">
+                </label>
             </div>
         </div>
-        <button onclick="addIngredient()">Adicionar Ingrediente</button>
+        <button onclick="adicionarIngrediente()">Adicionar Ingrediente</button>
     </div>
 
     <div class="section">
         <h2>Rendimento</h2>
-        <div class="input-group">
-            <label for="yield">Quantos pudins a receita rendeu?</label>
-            <input type="number" id="yield">
-        </div>
+        <label>Quantidade de pudins:
+            <input type="number" id="rendimento" min="1">
+        </label>
     </div>
 
     <div class="section">
         <h2>Custos Adicionais</h2>
-        <div class="input-group">
-            <label for="recipeTime">Tempo de Receita (min)</label>
-            <input type="number" id="recipeTime">
-            <label for="energyCost">Custo de KW/h</label>
-            <input type="number" id="energyCost" step="0.01">
-            <label for="taxes">Impostos de Energia (%)</label>
-            <input type="number" id="taxes" step="0.01">
-            <label for="gasCost">Custo do Botijão de Gás</label>
-            <input type="number" id="gasCost" step="0.01">
-            <label for="gasFlow">Vazão de Gás (L/h)</label>
-            <input type="number" id="gasFlow" step="0.01">
-            <label for="gasTime">Tempo de Forno (min)</label>
-            <input type="number" id="gasTime">
-            <label for="packagingCost">Custo Unitário da Embalagem</label>
-            <input type="number" id="packagingCost" step="0.01">
-            <label for="stickerCost">Custo Unitário do Adesivo</label>
-            <input type="number" id="stickerCost" step="0.01">
-        </div>
+        <label>Tempo de preparo (minutos):
+            <input type="number" id="tempoPreparo" min="0">
+        </label>
+        <label>Valor do KW/h:
+            <input type="number" id="valorKwh" step="0.01">
+        </label>
+        <label>Impostos de energia (%):
+            <input type="number" id="impostoEnergia" step="0.01">
+        </label>
+        <label>Valor do botijão de gás:
+            <input type="number" id="valorBotijao" step="0.01">
+        </label>
+        <label>Custo unitário da embalagem:
+            <input type="number" id="custoEmbalagem" step="0.01">
+        </label>
+        <label>Custo unitário do adesivo:
+            <input type="number" id="custoAdesivo" step="0.01">
+        </label>
     </div>
 
     <div class="section">
         <h2>Mão de Obra</h2>
-        <div class="input-group">
-            <label for="laborCost">Custo Mensal da Mão de Obra</label>
-            <input type="number" id="laborCost" step="0.01">
-            <label for="productionTime">Tempo de Produção (min)</label>
-            <input type="number" id="productionTime">
-        </div>
+        <label>Custo mensal da mão de obra:
+            <input type="number" id="custoMaoDeObra" step="0.01">
+        </label>
+        <label>Horas trabalhadas por mês:
+            <input type="number" id="horasTrabalhadas" value="220">
+        </label>
     </div>
 
     <div class="section">
-        <h2>Campos Adicionais</h2>
-        <div class="input-group">
-            <label for="deliveryFee">Taxa 1 de Entrega</label>
-            <input type="number" id="deliveryFee" step="0.01">
-            <label for="cardFee">Taxa 2 de Máquina de Cartão</label>
-            <input type="number" id="cardFee" step="0.01">
-            <label for="appFee">Taxa 3 de Aplicativo de Entrega</label>
-            <input type="number" id="appFee" step="0.01">
-        </div>
+        <h2>Taxas Adicionais</h2>
+        <label>
+            <input type="checkbox" id="taxaEntrega"> Taxa fixa de entrega (R$)
+            <input type="number" id="valorTaxaEntrega" step="0.01" disabled>
+        </label>
+        <label>
+            <input type="checkbox" id="taxaCartao"> Taxa de máquina de cartão (%)
+            <input type="number" id="valorTaxaCartao" step="0.01" disabled>
+        </label>
+        <label>
+            <input type="checkbox" id="taxaAplicativo"> Taxa de aplicativo de entrega (%)
+            <input type="number" id="valorTaxaAplicativo" step="0.01" disabled>
+        </label>
     </div>
 
     <div class="section">
         <h2>Margem de Lucro</h2>
-        <div class="input-group">
-            <label for="profitMargin">Margem de Lucro (%)</label>
-            <input type="number" id="profitMargin" step="0.01">
-        </div>
+        <label>Margem de lucro (%):
+            <input type="number" id="margemLucro" step="0.01">
+        </label>
     </div>
 
-    <button onclick="calculatePrice()">Calcular Preço do Pudin</button>
+    <button onclick="calcularPreco()">Calcular Preço</button>
 
-    <div id="result"></div>
+    <div id="resultado"></div>
 
     <script>
-        function addIngredient() {
-            const ingredientList = document.getElementById('ingredientList');
-            const newIngredient = document.createElement('div');
-            newIngredient.classList.add('input-group');
-            newIngredient.innerHTML = `
-                <label for="ingredientName">Nome do Ingrediente</label>
-                <input type="text">
-                <label for="ingredientQuantity">Quantidade</label>
-                <input type="number">
-                <label for="ingredientCost">Valor do Ingrediente</label>
-                <input type="number" step="0.01">
+        function adicionarIngrediente() {
+            const div = document.createElement('div');
+            div.className = 'ingrediente';
+            div.innerHTML = `
+                <label>Nome do ingrediente:
+                    <input type="text" class="nome-ingrediente">
+                </label>
+                <label>Quantidade:
+                    <input type="number" class="qtd-ingrediente" step="0.01">
+                </label>
+                <label>Valor:
+                    <input type="number" class="valor-ingrediente" step="0.01">
+                </label>
             `;
-            ingredientList.appendChild(newIngredient);
+            document.getElementById('ingredientes').appendChild(div);
         }
 
-        function calculatePrice() {
-            // Implementação da lógica de cálculo será adicionada aqui
-            document.getElementById('result').innerText = "O preço final do pudim é: R$ XX,XX";
+        function calcularPreco() {
+            // Cálculo do custo total dos ingredientes
+            let custoIngredientes = 0;
+            const ingredientes = document.querySelectorAll('.ingrediente');
+            ingredientes.forEach(ing => {
+                const qtd = parseFloat(ing.querySelector('.qtd-ingrediente').value) || 0;
+                const valor = parseFloat(ing.querySelector('.valor-ingrediente').value) || 0;
+                custoIngredientes += qtd * valor;
+            });
+
+            // Rendimento
+            const rendimento = parseInt(document.getElementById('rendimento').value) || 1;
+
+            // Custos adicionais
+            const tempoPreparo = parseInt(document.getElementById('tempoPreparo').value) || 0;
+            const valorKwh = parseFloat(document.getElementById('valorKwh').value) || 0;
+            const impostoEnergia = parseFloat(document.getElementById('impostoEnergia').value) || 0;
+            const valorBotijao = parseFloat(document.getElementById('valorBotijao').value) || 0;
+            const custoEmbalagem = parseFloat(document.getElementById('custoEmbalagem').value) || 0;
+            const custoAdesivo = parseFloat(document.getElementById('custoAdesivo').value) || 0;
+
+            // Cálculo do custo de energia
+            const custoEnergia = (tempoPreparo / 60) * valorKwh * (1 + impostoEnergia / 100);
+
+            // Cálculo do custo de gás (considerando a taxa de vazão de 0,3 Kg/h)
+            const custoGas = (tempoPreparo / 60) * 0.3 * (valorBotijao / 13); // Assumindo um botijão de 13kg
+
+            // Mão de obra
+            const custoMaoDeObra = parseFloat(document.getElementById('custoMaoDeObra').value) || 0;
+            const horasTrabalhadas = parseFloat(document.getElementById('horasTrabalhadas').value) || 220;
+            const custoHoraMaoDeObra = custoMaoDeObra / horasTrabalhadas;
+            const custoMaoDeObraPorFornada = custoHoraMaoDeObra * (tempoPreparo / 60);
+
+            // Taxas adicionais
+            const taxaEntrega = document.getElementById('taxaEntrega').checked ? parseFloat(document.getElementById('valorTaxaEntrega').value) || 0 : 0;
+            const taxaCartao = document.getElementById('taxaCartao').checked ? parseFloat(document.getElementById('valorTaxaCartao').value) || 0 : 0;
+            const taxaAplicativo = document.getElementById('taxaAplicativo').checked ? parseFloat(document.getElementById('valorTaxaAplicativo').value) || 0 : 0;
+
+            // Margem de lucro
+            const margemLucro = parseFloat(document.getElementById('margemLucro').value) || 0;
+
+            // Cálculo do custo total por pudim
+            const custoTotalPorPudim = (
+                (custoIngredientes + custoEnergia + custoGas + (custoEmbalagem + custoAdesivo) * rendimento + custoMaoDeObraPorFornada) / rendimento
+            );
+
+            // Cálculo do preço final considerando a margem de lucro e as taxas
+            let precoFinal = custoTotalPorPudim / (1 - margemLucro / 100);
+
+            if (taxaAplicativo > 0) {
+                precoFinal = precoFinal / (1 - taxaAplicativo / 100);
+            } else {
+                if (taxaCartao > 0) precoFinal = precoFinal / (1 - taxaCartao / 100);
+            }
+
+            // Adicionar taxa fixa de entrega, se aplicável
+            if (taxaEntrega > 0 && taxaAplicativo === 0) {
+                precoFinal += taxaEntrega / rendimento;
+            }
+
+            // Cálculo da margem de lucro por pudim
+            const margemLucroPorPudim = precoFinal - custoTotalPorPudim;
+
+            // Exibir resultado
+            document.getElementById('resultado').innerHTML = `
+                Custo total por pudim: R$ ${custoTotalPorPudim.toFixed(2)}<br>
+                Preço de venda sugerido: R$ ${precoFinal.toFixed(2)}<br>
+                Margem de lucro por pudim: R$ ${margemLucroPorPudim.toFixed(2)}
+            `;
+        }
+
+        // Habilitar/desabilitar campos de taxa
+        document.getElementById('taxaEntrega').addEventListener('change', function() {
+            document.getElementById('valorTaxaEntrega').disabled = !this.checked;
+        });
+        document.getElementById('taxaCartao').addEventListener('change', function() {
+            document.getElementById('valorTaxaCartao').disabled = !this.checked;
+        });
+        document.getElementById('taxaAplicativo').addEventListener('change', function() {
+            document.getElementById('valorTaxaAplicativo').disabled = !this.checked;
+            if (this.checked) {
+                document.getElementById('taxaEntrega').checked = false;
+                document.getElementById('taxaCartao').checked = false;
+                document.getElementById('valorTaxaEntrega').disabled = true;
+                document.getElementById('valorTaxaCartao').disabled = true;
+            }
+        });
+
+        // Registrar o Service Worker para funcionalidade de PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then((reg) => console.log('Service worker registered', reg))
+                .catch((err) => console.log('Service worker not registered', err));
         }
     </script>
 </body>
-
 </html>
