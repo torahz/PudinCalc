@@ -1,16 +1,26 @@
 {
-  "name": "PudinCalc",
-  "short_name": "PudinCalc",
-  "description": "Calculadora de preço para pudins",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#FBDF96",
-  "theme_color": "#E07F14",
+  "short_name": "Rampas",
+  "name": "Calculadora de Rampas - A Priori",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ccc",
+  "theme_color": "#666",
+  "description": "Calculadora para dimensionamento de rampas acessíveis",
+  "orientation": "portrait",
+  "scope": "/",
+  "prefer_related_applications": false
 }

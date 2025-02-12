@@ -1,257 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PudinCalc 🍮</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍮</text></svg>">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #FBDF96;
-            color: #AF5711;
-        }
-        h1 {
-            color: #E07F14;
-            text-align: center;
-        }
-        .section {
-            background-color: #F7C876;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 5px;
-            margin-top: 5px;
-            border: 1px solid #CF701D;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #F5B03E;
-            color: #AF5711;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #E07F14;
-        }
-        #resultado {
-            font-weight: bold;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#666">
+  <meta name="description" content="Calculadora para dimensionamento de rampas acessíveis">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>Calculadora de Rampas - A Priori</title>
+  <style>
+    body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background: #bbb; text-align: center; }
+    .container { max-width: 500px; margin: 0 auto; background: #ddd; padding: 15px; border-radius: 8px; }
+    button { background: #555; color: white; padding: 10px; border: none; cursor: pointer; }
+    button:hover { background: #444; }
+    .resultado { background: #eee; padding: 10px; border-radius: 4px; margin-top: 10px; }
+  </style>
 </head>
 <body>
-    <h1>PudinCalc 🍮</h1>
-    
-    <div class="section">
-        <h2>Receita</h2>
-        <div id="ingredientes">
-            <div class="ingrediente">
-                <label>Nome do ingrediente:
-                    <input type="text" class="nome-ingrediente">
-                </label>
-                <label>Quantidade:
-                    <input type="number" class="qtd-ingrediente" step="0.01">
-                </label>
-                <label>Valor:
-                    <input type="number" class="valor-ingrediente" step="0.01">
-                </label>
-            </div>
-        </div>
-        <button onclick="adicionarIngrediente()">Adicionar Ingrediente</button>
-    </div>
+  <h1>Calculadora de Rampas - A Priori</h1>
+  <div class="container">
+    <h2>Cálculo da Rampa</h2>
+    <label for="desnivel">Desnível a ser vencido (cm):</label>
+    <input type="number" id="desnivel" min="1" required>
+    <h3>Escolha a inclinação</h3>
+    <label><input type="radio" name="inclinacao" value="5"> 5% (1:20)</label><br>
+    <label><input type="radio" name="inclinacao" value="6.25"> 6,25% (1:16) - máx 100 cm</label><br>
+    <label><input type="radio" name="inclinacao" value="8.33"> 8,33% (1:12) - máx 80 cm</label><br>
+    <label><input type="radio" name="inclinacao" value="10"> 10% (1:10) - máx 20 cm</label><br>
+    <label><input type="radio" name="inclinacao" value="12.5"> 12,5% (1:8) - máx 7,5 cm</label><br>
+    <button onclick="calcularRampa()">Calcular</button>
+    <div class="resultado" id="resultado"></div>
+  </div>
+  <div class="container">
+    <h2>Cálculo do Trecho</h2>
+    <label for="inclinacaoTrecho">Inclinação (%):</label>
+    <input type="number" id="inclinacaoTrecho" step="0.01">
+    <label for="comprimentoTrecho">Comprimento da rampa (cm):</label>
+    <input type="number" id="comprimentoTrecho">
+    <button onclick="calcularTrecho()">Calcular Altura Vencida</button>
+    <div class="resultado" id="resultadoTrecho"></div>
+  </div>
+  <script>
+    function calcularRampa() {
+      let desnivel = parseFloat(document.getElementById("desnivel").value);
+      let inclinacao = document.querySelector('input[name="inclinacao"]:checked');
+      if (!inclinacao) {
+        document.getElementById("resultado").innerText = "Selecione uma inclinação!";
+        return;
+      }
+      inclinacao = parseFloat(inclinacao.value);
+      let limites = {5: Infinity, 6.25: 100, 8.33: 80, 10: 20, 12.5: 7.5};
+      if (desnivel > limites[inclinacao]) {
+        document.getElementById("resultado").innerText = `Erro: O desnível máximo para esta inclinação é ${limites[inclinacao]} cm.`;
+        return;
+      }
+      let comprimento = Math.round(desnivel / (inclinacao / 100));
+      document.getElementById("resultado").innerHTML = `<p>Inclinação: <strong>${inclinacao}%</strong></p>` +
+        `<p>Desnível: <strong>${desnivel} cm</strong></p>` +
+        `<p>Comprimento necessário: <strong>${comprimento} cm</strong></p>`;
+    }
 
-    <div class="section">
-        <h2>Rendimento</h2>
-        <label>Quantidade de pudins:
-            <input type="number" id="rendimento" min="1">
-        </label>
-    </div>
+    function calcularTrecho() {
+      let inclinacao = parseFloat(document.getElementById("inclinacaoTrecho").value);
+      let comprimento = parseFloat(document.getElementById("comprimentoTrecho").value);
+      if (isNaN(inclinacao) || inclinacao <= 0 || isNaN(comprimento) || comprimento <= 0) {
+        document.getElementById("resultadoTrecho").innerText = "Insira valores válidos!";
+        return;
+      }
+      let alturaVencida = Math.round((comprimento * inclinacao) / 100);
+      document.getElementById("resultadoTrecho").innerHTML = `<p>Inclinação: <strong>${inclinacao}%</strong></p>` +
+        `<p>Comprimento: <strong>${comprimento} cm</strong></p>` +
+        `<p>Altura vencida: <strong>${alturaVencida} cm</strong></p>`;
+    }
 
-    <div class="section">
-        <h2>Custos Adicionais</h2>
-        <label>Tempo de preparo (minutos):
-            <input type="number" id="tempoPreparo" min="0">
-        </label>
-        <label>Valor do KW/h:
-            <input type="number" id="valorKwh" step="0.01">
-        </label>
-        <label>Impostos de energia (%):
-            <input type="number" id="impostoEnergia" step="0.01">
-        </label>
-        <label>Valor do botijão de gás:
-            <input type="number" id="valorBotijao" step="0.01">
-        </label>
-        <label>Custo unitário da embalagem:
-            <input type="number" id="custoEmbalagem" step="0.01">
-        </label>
-        <label>Custo unitário do adesivo:
-            <input type="number" id="custoAdesivo" step="0.01">
-        </label>
-    </div>
-
-    <div class="section">
-        <h2>Mão de Obra</h2>
-        <label>Custo mensal da mão de obra:
-            <input type="number" id="custoMaoDeObra" step="0.01">
-        </label>
-        <label>Horas trabalhadas por mês:
-            <input type="number" id="horasTrabalhadas" value="220">
-        </label>
-    </div>
-
-    <div class="section">
-        <h2>Taxas Adicionais</h2>
-        <label>
-            <input type="checkbox" id="taxaEntrega"> Taxa fixa de entrega (R$)
-            <input type="number" id="valorTaxaEntrega" step="0.01" disabled>
-        </label>
-        <label>
-            <input type="checkbox" id="taxaCartao"> Taxa de máquina de cartão (%)
-            <input type="number" id="valorTaxaCartao" step="0.01" disabled>
-        </label>
-        <label>
-            <input type="checkbox" id="taxaAplicativo"> Taxa de aplicativo de entrega (%)
-            <input type="number" id="valorTaxaAplicativo" step="0.01" disabled>
-        </label>
-    </div>
-
-    <div class="section">
-        <h2>Margem de Lucro</h2>
-        <label>Margem de lucro (%):
-            <input type="number" id="margemLucro" step="0.01">
-        </label>
-    </div>
-
-    <button onclick="calcularPreco()">Calcular Preço</button>
-
-    <div id="resultado"></div>
-
-    <script>
-        function adicionarIngrediente() {
-            const div = document.createElement('div');
-            div.className = 'ingrediente';
-            div.innerHTML = `
-                <label>Nome do ingrediente:
-                    <input type="text" class="nome-ingrediente">
-                </label>
-                <label>Quantidade:
-                    <input type="number" class="qtd-ingrediente" step="0.01">
-                </label>
-                <label>Valor:
-                    <input type="number" class="valor-ingrediente" step="0.01">
-                </label>
-            `;
-            document.getElementById('ingredientes').appendChild(div);
-        }
-
-        function calcularPreco() {
-            // Cálculo do custo total dos ingredientes
-            let custoIngredientes = 0;
-            const ingredientes = document.querySelectorAll('.ingrediente');
-            ingredientes.forEach(ing => {
-                const qtd = parseFloat(ing.querySelector('.qtd-ingrediente').value) || 0;
-                const valor = parseFloat(ing.querySelector('.valor-ingrediente').value) || 0;
-                custoIngredientes += qtd * valor;
-            });
-
-            // Rendimento
-            const rendimento = parseInt(document.getElementById('rendimento').value) || 1;
-
-            // Custos adicionais
-            const tempoPreparo = parseInt(document.getElementById('tempoPreparo').value) || 0;
-            const valorKwh = parseFloat(document.getElementById('valorKwh').value) || 0;
-            const impostoEnergia = parseFloat(document.getElementById('impostoEnergia').value) || 0;
-            const valorBotijao = parseFloat(document.getElementById('valorBotijao').value) || 0;
-            const custoEmbalagem = parseFloat(document.getElementById('custoEmbalagem').value) || 0;
-            const custoAdesivo = parseFloat(document.getElementById('custoAdesivo').value) || 0;
-
-            // Cálculo do custo de energia
-            const custoEnergia = (tempoPreparo / 60) * valorKwh * (1 + impostoEnergia / 100);
-
-            // Cálculo do custo de gás (considerando a taxa de vazão de 0,3 Kg/h)
-            const custoGas = (tempoPreparo / 60) * 0.3 * (valorBotijao / 13); // Assumindo um botijão de 13kg
-
-            // Mão de obra
-            const custoMaoDeObra = parseFloat(document.getElementById('custoMaoDeObra').value) || 0;
-            const horasTrabalhadas = parseFloat(document.getElementById('horasTrabalhadas').value) || 220;
-            const custoHoraMaoDeObra = custoMaoDeObra / horasTrabalhadas;
-            const custoMaoDeObraPorFornada = custoHoraMaoDeObra * (tempoPreparo / 60);
-
-            // Taxas adicionais
-            const taxaEntrega = document.getElementById('taxaEntrega').checked ? parseFloat(document.getElementById('valorTaxaEntrega').value) || 0 : 0;
-            const taxaCartao = document.getElementById('taxaCartao').checked ? parseFloat(document.getElementById('valorTaxaCartao').value) || 0 : 0;
-            const taxaAplicativo = document.getElementById('taxaAplicativo').checked ? parseFloat(document.getElementById('valorTaxaAplicativo').value) || 0 : 0;
-
-            // Margem de lucro
-            const margemLucro = parseFloat(document.getElementById('margemLucro').value) || 0;
-
-            // Cálculo do custo total por pudim
-            const custoTotalPorPudim = (
-                (custoIngredientes + custoEnergia + custoGas + (custoEmbalagem + custoAdesivo) * rendimento + custoMaoDeObraPorFornada) / rendimento
-            );
-
-            // Cálculo do preço final considerando a margem de lucro e as taxas
-            let precoFinal = custoTotalPorPudim / (1 - margemLucro / 100);
-
-            if (taxaAplicativo > 0) {
-                precoFinal = precoFinal / (1 - taxaAplicativo / 100);
-            } else {
-                if (taxaCartao > 0) precoFinal = precoFinal / (1 - taxaCartao / 100);
-            }
-
-            // Adicionar taxa fixa de entrega, se aplicável
-            if (taxaEntrega > 0 && taxaAplicativo === 0) {
-                precoFinal += taxaEntrega / rendimento;
-            }
-
-            // Cálculo da margem de lucro por pudim
-            const margemLucroPorPudim = precoFinal - custoTotalPorPudim;
-
-            // Exibir resultado
-            document.getElementById('resultado').innerHTML = `
-                Custo total por pudim: R$ ${custoTotalPorPudim.toFixed(2)}<br>
-                Preço de venda sugerido: R$ ${precoFinal.toFixed(2)}<br>
-                Margem de lucro por pudim: R$ ${margemLucroPorPudim.toFixed(2)}
-            `;
-        }
-
-        // Habilitar/desabilitar campos de taxa
-        document.getElementById('taxaEntrega').addEventListener('change', function() {
-            document.getElementById('valorTaxaEntrega').disabled = !this.checked;
-        });
-        document.getElementById('taxaCartao').addEventListener('change', function() {
-            document.getElementById('valorTaxaCartao').disabled = !this.checked;
-        });
-        document.getElementById('taxaAplicativo').addEventListener('change', function() {
-            document.getElementById('valorTaxaAplicativo').disabled = !this.checked;
-            if (this.checked) {
-                document.getElementById('taxaEntrega').checked = false;
-                document.getElementById('taxaCartao').checked = false;
-                document.getElementById('valorTaxaEntrega').disabled = true;
-                document.getElementById('valorTaxaCartao').disabled = true;
-            }
-        });
-
-        // Registrar o Service Worker para funcionalidade de PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then((reg) => console.log('Service worker registered', reg))
-                .catch((err) => console.log('Service worker not registered', err));
-        }
-    </script>
+    // Registra o Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => {
+            console.log('Service Worker registrado com sucesso:', registration);
+          })
+          .catch(error => {
+            console.log('Falha ao registrar o Service Worker:', error);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
