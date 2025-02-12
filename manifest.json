@@ -15,10 +15,10 @@
       "purpose": "any maskable"
     }
   ],
-  "start_url": "./",
+  "start_url": "https://torahz.github.io/RampCalc/",
   "display": "standalone",
   "background_color": "#ccc",
-  "theme_color": "#666",
+  "theme_color": "#777",
   "description": "Calculadora para dimensionamento de rampas acessíveis",
   "orientation": "portrait",
   "scope": "/",
